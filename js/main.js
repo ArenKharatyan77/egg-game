@@ -71,10 +71,18 @@ gameContainer.addEventListener("touchend", (e) => {
 document.addEventListener(
   "touchmove",
   function (e) {
+    if (e.target.closest(".game-over")) {
+      return; // Allow normal touch behavior in game over screen
+    }
     e.preventDefault();
   },
   { passive: false }
 );
+
+// Prevent context menu on long press
+document.addEventListener("contextmenu", function (e) {
+  e.preventDefault();
+});
 
 function updateBasket() {
   if (!gameState.gameRunning) return;
@@ -276,5 +284,14 @@ window.addEventListener("resize", () => {
 // Initialize and start the game
 window.addEventListener("load", () => {
   initializeGame();
+
+  // Add event listener for restart button
+  const restartButton = document.getElementById("restartButton");
+  restartButton.addEventListener("click", restartGame);
+  restartButton.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    restartGame();
+  });
+
   gameLoop();
 });
