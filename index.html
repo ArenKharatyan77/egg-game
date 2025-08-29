@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="game-container" id="gameContainer">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+
+        <div class="game-info">
+            <div>Score: <span id="score">0</span></div>
+            <div>Lives: <span id="lives">3</span></div>
+            <div>Level: <span id="level">1</span></div>
+        </div>
+
+        <div class="basket" id="basket"></div>
+
+        <div class="game-over" id="gameOver">
+            <h2>Game Over!</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <p>You caught <span id="eggsCaught">0</span> eggs!</p>
+            <button onclick="restartGame()">Play Again</button>
+        </div>
+
+        <div class="instructions">
+            Use ← → arrow keys or mouse to move the basket. Catch the eggs!<br>
+            Golden eggs are worth 5 points!
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

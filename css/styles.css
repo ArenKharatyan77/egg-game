@@ -1,0 +1,227 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #87ceeb 0%, #98fb98 100%);
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.game-container {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  background: linear-gradient(to bottom, #87ceeb 0%, #98fb98 100%);
+  border: 4px solid #8b4513;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.game-info {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  color: #2f4f4f;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 100;
+}
+
+.basket {
+  position: absolute;
+  bottom: 20px;
+  width: 80px;
+  height: 40px;
+  background: #8b4513;
+  border-radius: 0 0 40px 40px;
+  border: 3px solid #654321;
+  transition: left 0.1s ease;
+  box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.basket::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  height: 10px;
+  background: #a0522d;
+  border-radius: 10px;
+}
+
+.egg {
+  position: absolute;
+  width: 30px;
+  height: 40px;
+  background: radial-gradient(ellipse at center, #fff 0%, #f5f5dc 100%);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  border: 2px solid #ddd;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  animation: fall linear;
+}
+
+.golden-egg {
+  background: radial-gradient(ellipse at center, #ffd700 0%, #ffa500 100%);
+  border-color: #b8860b;
+  box-shadow: 0 0 15px #ffd700, 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.cracked-egg {
+  position: absolute;
+  width: 40px;
+  height: 30px;
+  background: #ffff99;
+  border-radius: 50%;
+  opacity: 0;
+  animation: crack 0.5s ease-out;
+}
+
+.cracked-egg::before {
+  content: "💥";
+  position: absolute;
+  top: -5px;
+  left: 5px;
+  font-size: 20px;
+}
+
+@keyframes fall {
+  from {
+    top: -50px;
+  }
+  to {
+    top: 650px;
+  }
+}
+
+@keyframes crack {
+  0% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: none;
+}
+
+.game-over h2 {
+  color: #ff6b6b;
+  margin-bottom: 15px;
+  font-size: 28px;
+}
+
+.game-over button {
+  background: #4ecdc4;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background 0.3s ease;
+}
+
+.game-over button:hover {
+  background: #45b7b8;
+}
+
+.instructions {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #2f4f4f;
+  font-size: 14px;
+  text-align: center;
+}
+
+.cloud {
+  position: absolute;
+  background: white;
+  border-radius: 50px;
+  opacity: 0.8;
+  animation: float 15s infinite linear;
+}
+
+.cloud::before,
+.cloud::after {
+  content: "";
+  position: absolute;
+  background: white;
+  border-radius: 50px;
+}
+
+.cloud1 {
+  width: 60px;
+  height: 30px;
+  top: 80px;
+  left: -100px;
+}
+
+.cloud1::before {
+  width: 40px;
+  height: 40px;
+  top: -15px;
+  left: 10px;
+}
+
+.cloud1::after {
+  width: 30px;
+  height: 30px;
+  top: -10px;
+  right: 10px;
+}
+
+.cloud2 {
+  width: 40px;
+  height: 20px;
+  top: 150px;
+  left: -80px;
+  animation-delay: -7s;
+}
+
+.cloud2::before {
+  width: 30px;
+  height: 30px;
+  top: -10px;
+  left: 5px;
+}
+
+@keyframes float {
+  from {
+    left: -100px;
+  }
+  to {
+    left: 820px;
+  }
+}
