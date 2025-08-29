@@ -11,7 +11,7 @@ let gameState = {
   score: 0,
   lives: 3,
   level: 1,
-  basketPosition: 360,
+  basketPosition: 0,
   eggs: [],
   gameRunning: true,
   eggsCaught: 0,
@@ -20,38 +20,92 @@ let gameState = {
 };
 
 let keys = {};
-let mouseX = 400;
+let mouseX = 0;
+let touchX = 0;
 let lastEggSpawn = 0;
+let containerWidth = 0;
+let basketWidth = 80;
 
-// Event listeners
+function initializeGame() {
+  containerWidth = gameContainer.clientWidth;
+  basketWidth = basket.clientWidth;
+  gameState.basketPosition = (containerWidth - basketWidth) / 2;
+  basket.style.left = gameState.basketPosition + "px";
+}
+
+// Event listeners for keyboard
 document.addEventListener("keydown", (e) => {
   keys[e.key] = true;
+  e.preventDefault();
 });
 
 document.addEventListener("keyup", (e) => {
   keys[e.key] = false;
+  e.preventDefault();
 });
 
+// Mouse controls
 gameContainer.addEventListener("mousemove", (e) => {
   const rect = gameContainer.getBoundingClientRect();
   mouseX = e.clientX - rect.left;
 });
 
+// Touch controls
+gameContainer.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  const rect = gameContainer.getBoundingClientRect();
+  touchX = e.touches[0].clientX - rect.left;
+});
+
+gameContainer.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  const rect = gameContainer.getBoundingClientRect();
+  touchX = e.touches[0].clientX - rect.left;
+});
+
+gameContainer.addEventListener("touchend", (e) => {
+  e.preventDefault();
+});
+
+// Prevent default behaviors for better mobile experience
+document.addEventListener(
+  "touchmove",
+  function (e) {
+    e.preventDefault();
+  },
+  { passive: false }
+);
+
 function updateBasket() {
   if (!gameState.gameRunning) return;
 
+  containerWidth = gameContainer.clientWidth;
+  basketWidth = basket.clientWidth;
+  const maxPosition = containerWidth - basketWidth;
+
   // Keyboard controls
   if (keys["ArrowLeft"] && gameState.basketPosition > 0) {
-    gameState.basketPosition -= 5;
+    gameState.basketPosition -= 8;
   }
-  if (keys["ArrowRight"] && gameState.basketPosition < 720) {
-    gameState.basketPosition += 5;
+  if (keys["ArrowRight"] && gameState.basketPosition < maxPosition) {
+    gameState.basketPosition += 8;
   }
 
-  // Mouse controls
-  const targetX = Math.max(0, Math.min(720, mouseX - 40));
-  gameState.basketPosition += (targetX - gameState.basketPosition) * 0.2;
+  // Mouse and touch controls
+  let targetX = mouseX || touchX;
+  if (targetX > 0) {
+    targetX = Math.max(
+      basketWidth / 2,
+      Math.min(containerWidth - basketWidth / 2, targetX - basketWidth / 2)
+    );
+    gameState.basketPosition += (targetX - gameState.basketPosition) * 0.3;
+  }
 
+  // Constrain basket position
+  gameState.basketPosition = Math.max(
+    0,
+    Math.min(maxPosition, gameState.basketPosition)
+  );
   basket.style.left = gameState.basketPosition + "px";
 }
 
@@ -67,7 +121,10 @@ function spawnEgg() {
   const isGolden = Math.random() < 0.1; // 10% chance for golden egg
 
   egg.className = isGolden ? "egg golden-egg" : "egg";
-  egg.style.left = Math.random() * 750 + "px";
+
+  // Responsive egg positioning
+  const maxLeft = containerWidth - 30; // 30px is egg width
+  egg.style.left = Math.random() * maxLeft + "px";
   egg.style.animationDuration = gameState.eggSpeed + "ms";
 
   gameContainer.appendChild(egg);
@@ -86,7 +143,7 @@ function spawnEgg() {
       if (!egg.caught) {
         gameState.lives--;
         livesElement.textContent = gameState.lives;
-        createCrackEffect(egg.offsetLeft + 15, 570);
+        createCrackEffect(egg.offsetLeft + 15, gameContainer.clientHeight - 80);
 
         if (gameState.lives <= 0) {
           gameOver();
@@ -171,7 +228,7 @@ function restartGame() {
     score: 0,
     lives: 3,
     level: 1,
-    basketPosition: 360,
+    basketPosition: (containerWidth - basketWidth) / 2,
     eggs: [],
     gameRunning: true,
     eggsCaught: 0,
@@ -193,6 +250,8 @@ function restartGame() {
   });
 
   lastEggSpawn = 0;
+  mouseX = 0;
+  touchX = 0;
 }
 
 // Game loop
@@ -203,7 +262,19 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-// Start the game
-gameLoop();
+// Handle window resize
+window.addEventListener("resize", () => {
+  containerWidth = gameContainer.clientWidth;
+  basketWidth = basket.clientWidth;
+  // Adjust basket position if needed
+  const maxPosition = containerWidth - basketWidth;
+  if (gameState.basketPosition > maxPosition) {
+    gameState.basketPosition = maxPosition;
+  }
+});
 
-
+// Initialize and start the game
+window.addEventListener("load", () => {
+  initializeGame();
+  gameLoop();
+});

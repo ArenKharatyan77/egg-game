@@ -6,18 +6,21 @@
 
 body {
   background: linear-gradient(135deg, #87ceeb 0%, #98fb98 100%);
-  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-family: "Arial", sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   overflow: hidden;
+  touch-action: none;
 }
 
 .game-container {
   position: relative;
-  width: 800px;
-  height: 600px;
+  width: 100vw;
+  height: 100vh;
+  max-width: 800px;
+  max-height: 600px;
   background: linear-gradient(to bottom, #87ceeb 0%, #98fb98 100%);
   border: 4px solid #8b4513;
   border-radius: 10px;
@@ -33,9 +36,10 @@ body {
   display: flex;
   justify-content: space-between;
   color: #2f4f4f;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   z-index: 100;
+  flex-wrap: wrap;
 }
 
 .basket {
@@ -101,7 +105,7 @@ body {
     top: -50px;
   }
   to {
-    top: 650px;
+    top: calc(100vh + 50px);
   }
 }
 
@@ -131,6 +135,7 @@ body {
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   display: none;
+  z-index: 200;
 }
 
 .game-over h2 {
@@ -143,12 +148,13 @@ body {
   background: #4ecdc4;
   color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 15px 30px;
   font-size: 18px;
   border-radius: 25px;
   cursor: pointer;
   margin-top: 15px;
   transition: background 0.3s ease;
+  touch-action: manipulation;
 }
 
 .game-over button:hover {
@@ -161,8 +167,9 @@ body {
   left: 50%;
   transform: translateX(-50%);
   color: #2f4f4f;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
+  padding: 0 10px;
 }
 
 .cloud {
@@ -222,6 +229,105 @@ body {
     left: -100px;
   }
   to {
-    left: 820px;
+    left: calc(100vw + 100px);
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .game-container {
+    width: 100vw;
+    height: 100vh;
+    border: none;
+    border-radius: 0;
+    max-width: none;
+    max-height: none;
+  }
+
+  .game-info {
+    font-size: 16px;
+    padding: 0 5px;
+  }
+
+  .basket {
+    width: 70px;
+    height: 35px;
+    bottom: 30px;
+  }
+
+  .egg {
+    width: 25px;
+    height: 35px;
+  }
+
+  .instructions {
+    font-size: 10px;
+    bottom: 5px;
+  }
+
+  .game-over {
+    padding: 20px;
+    margin: 10px;
+    width: calc(100% - 20px);
+    max-width: 300px;
+  }
+
+  .game-over h2 {
+    font-size: 24px;
+  }
+
+  .game-over button {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-info {
+    font-size: 14px;
+    gap: 10px;
+  }
+
+  .basket {
+    width: 60px;
+    height: 30px;
+  }
+
+  .egg {
+    width: 22px;
+    height: 30px;
+  }
+
+  .cloud1,
+  .cloud2 {
+    transform: scale(0.8);
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .game-info {
+    font-size: 12px;
+    top: 5px;
+  }
+
+  .basket {
+    bottom: 10px;
+    width: 50px;
+    height: 25px;
+  }
+
+  .instructions {
+    font-size: 8px;
+    bottom: 2px;
+  }
+
+  .game-over {
+    padding: 15px;
+  }
+
+  .game-over h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
   }
 }
